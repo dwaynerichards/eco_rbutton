@@ -16,17 +16,22 @@
   "dependencies": {
     "@babel/plugin-transform-react-jsx-source": "^7.16.7",
     "@openzeppelin/contracts": "^4.4.2",
-    "ethers": "^5.5.3"
+    "dotenv": "^12.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
     "@babel/preset-react": "^7.16.7",
+    "@nomiclabs/hardhat-ethers": "^2.0.4",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "chai": "^4.3.4",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.3",
     "hardhat": "^2.8.2",
     "parcel": "^2.2.0",
     "prettier": "^2.5.1",

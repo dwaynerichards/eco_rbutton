@@ -1,0 +1,148 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/Darkwing/Desktop/Codesmith/githubclones/eco_rbutton/contracts/iterableMap.sol": {
+      "lastModificationDate": 1642273868768,
+      "contentHash": "948625a3d1f3e0d5ed4c9ba73af7c72b",
+      "sourceName": "contracts/iterableMap.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "IterableMap"
+      ]
+    },
+    "/Users/Darkwing/Desktop/Codesmith/githubclones/eco_rbutton/contracts/RButton.sol": {
+      "lastModificationDate": 1642313011335,
+      "contentHash": "d2a774524d62232629e891c3b1390c50",
+      "sourceName": "contracts/RButton.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./iterableMap.sol",
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "RButton"
+      ]
+    },
+    "/Users/Darkwing/Desktop/Codesmith/githubclones/eco_rbutton/node_modules/hardhat/console.sol": {
+      "lastModificationDate": 1642211970009,
+      "contentHash": "cc4777addd464ea56fa35b1c45df0591",
+      "sourceName": "hardhat/console.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "console"
+      ]
+    },
+    "/Users/Darkwing/Desktop/Codesmith/githubclones/eco_rbutton/contracts/Migrations.sol": {
+      "lastModificationDate": 1642213038039,
+      "contentHash": "63beaafb4f2e87c93db7a65892b63baa",
+      "sourceName": "contracts/Migrations.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "Migrations"
+      ]
+    }
+  }
+}
