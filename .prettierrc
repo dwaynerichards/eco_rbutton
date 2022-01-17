@@ -1,7 +1,8 @@
 {
   "singleQuote": false,
   "bracketSameLine": true,
-  "printWidth": 100,
+  "printWidth": 120,
+  "trailingComma": "none",
   "overrides": [
     {
       "files": "*.sol",

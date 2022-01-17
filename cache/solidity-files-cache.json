@@ -19,12 +19,19 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
               ],
               "": [
                 "ast"
               ]
             }
+          },
+          "metadata": {
+            "useLiteralContent": true
           }
         }
       },
@@ -54,12 +61,19 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
               ],
               "": [
                 "ast"
               ]
             }
+          },
+          "metadata": {
+            "useLiteralContent": true
           }
         }
       },
@@ -92,12 +106,19 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
               ],
               "": [
                 "ast"
               ]
             }
+          },
+          "metadata": {
+            "useLiteralContent": true
           }
         }
       },
@@ -127,12 +148,19 @@
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "metadata"
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
               ],
               "": [
                 "ast"
               ]
             }
+          },
+          "metadata": {
+            "useLiteralContent": true
           }
         }
       },
