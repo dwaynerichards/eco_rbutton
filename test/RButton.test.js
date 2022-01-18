@@ -1,21 +1,28 @@
 const { expect } = require("./chai-setup");
+const { utils } = require("ethers");
 const { setup } = require("./utils");
 // eslint-disable-next-line no-undef
 // we create a setup function that can be called by every test and
 
 describe("RButton contract", () => {
-  const testObj = { value: 100000 };
+  let oneEther = utils.parseEther("1");
+  const testObj = { value: oneEther };
+  const vaultToStr = async (signer) => {
+    let chest = await signer.RButton.checkVault();
+    return utils.formatEther(chest);
+  };
   // eslint-disable-next-line no-unused-vars
+
+  // const oneEther = utils.parseUnits("1", "ether");
   it("Should deposit ether into treasure chest", async () => {
     //if you write many tests, and they all refer to that fixture, the deployment will not be reexecuted.
-    const { RButton, signers } = await setup();
-    // // We use .connect(signer) in setup invocation
-    const tx = await signers[0].RButton.pressButton(testObj);
-    // const tx = await RButton.connect(account1).pressButton(testObj);
+    const { signers } = await setup();
+    const signer = signers[0];
+    const tx = await signer.RButton.pressButton(testObj);
     await tx.wait();
-    let vaultTotal = await RButton.getVaultEth();
-    vaultTotal = vaultTotal.toNumber();
-    expect(vaultTotal).to.equal(100000);
+    const vaultTotal = await vaultToStr(signer);
+    oneEther = utils.formatEther(oneEther);
+    expect(vaultTotal).to.equal(oneEther);
   });
 
   it("Should log true to the blockChain after successful deposit ", async () => {
@@ -70,17 +77,14 @@ describe("RButton contract", () => {
     await signer.RButton.test();
     await signer.RButton.test();
     await signer.RButton.test();
-    const hexToNum = async (signer) => {
-      const chest = await signer.RButton.getVaultEth();
-      return parseInt(chest._hex, 16);
-    };
-    const chestVal = await hexToNum(claimer);
-    console.log("chestVal", chestVal, 200000);
-    expect(chestVal).to.equal(200000);
+
+    const currentVault = await vaultToStr(claimer);
+    console.log("chestVal", currentVault, "2");
+    expect(currentVault).to.equal("2.0");
     await claimer.RButton.claimTreasure();
-    const empty = await hexToNum(claimer);
-    console.log("empty:", empty, 0);
-    expect(empty).to.equal(0);
+    const emptyVault = await vaultToStr(claimer);
+    console.log("empty:", emptyVault, "0");
+    expect(emptyVault).to.equal("0.0");
   });
 });
 module.exports = { setup };

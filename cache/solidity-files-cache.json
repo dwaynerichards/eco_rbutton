@@ -44,8 +44,8 @@
       ]
     },
     "/Users/Darkwing/Desktop/Codesmith/githubclones/eco_rbutton/contracts/RButton.sol": {
-      "lastModificationDate": 1642467592065,
-      "contentHash": "5628ba5c3ff80a9aa07027bc761a6afc",
+      "lastModificationDate": 1642521588411,
+      "contentHash": "834570a7b2f4c034cd17aca75e9f4090",
       "sourceName": "contracts/RButton.sol",
       "solcConfig": {
         "version": "0.7.6",
