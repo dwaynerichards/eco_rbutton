@@ -1,15 +1,7 @@
-import { expect } from "./chai-setup";
-import { ethers, deployments, getUnnamedAccounts } from "hardhat";
-import { setupUsers } from "./utils";
+const { expect } = require("./chai-setup");
+const { setup } = require("./utils");
 // eslint-disable-next-line no-undef
 // we create a setup function that can be called by every test and
-const setup = async () => {
-  await deployments.fixture(["RButton"]); //deployment executed and reset (use of evm_snapshot for faster tests)
-  const contract = { RButton: await ethers.getContract("RButton") }; //instantiated ethers contract instance
-  //const { deployer } = await getNamedAccounts();
-  const signers = await setupUsers(await getUnnamedAccounts(), contract);
-  return { ...contract, signers };
-};
 
 describe("RButton contract", () => {
   const testObj = { value: 100000 };
@@ -25,4 +17,70 @@ describe("RButton contract", () => {
     vaultTotal = vaultTotal.toNumber();
     expect(vaultTotal).to.equal(100000);
   });
+
+  it("Should log true to the blockChain after successful deposit ", async () => {
+    const { signers } = await setup();
+    const signer = signers[0];
+    let tx = await signer.RButton.pressButton(testObj);
+    tx = await tx.wait();
+    const isDeposited = tx.events[0].args.success;
+    console.log(isDeposited);
+    expect(isDeposited).to.equal(true);
+  });
+
+  it("Should log block in which coins were deposited", async () => {
+    const { signers } = await setup();
+    const signer = signers[0];
+    let tx = await signer.RButton.pressButton(testObj);
+    tx = await tx.wait();
+    const bnHex = tx.events[0].args.depositBlock._hex;
+    const bn = parseInt(bnHex, 16);
+    expect(tx.blockNumber).to.equal(bn);
+  });
+  it("should revert after unsuccessful deposit ", async () => {
+    const { signers } = await setup();
+    const signer = signers[0];
+    const small = { value: 100 };
+    await expect(signer.RButton.pressButton(small)).to.be.revertedWith("More Ether is require");
+  });
+  it("should revert if incorrect address attempts to claim treasure ", async () => {
+    const { signers } = await setup();
+    const goodSign = signers[0];
+    const badSign = signers[1];
+    await goodSign.RButton.pressButton(testObj);
+    await goodSign.RButton.test();
+    await goodSign.RButton.test();
+    await expect(badSign.RButton.claimTreasure()).to.be.revertedWith("Claiming treasure not available to this address");
+  });
+
+  it("Should revert if claim is made before block allowance", async () => {
+    const { signers } = await setup();
+    const signer = signers[0];
+    await signer.RButton.pressButton(testObj);
+    await signer.RButton.test();
+    expect(signer.RButton.claimTreasure()).to.be.revertedWith("Insufficient time has passed");
+  });
+
+  it("Vault should be emptied", async () => {
+    const { signers } = await setup();
+    const signer = signers[0];
+    const claimer = signers[1];
+    await signer.RButton.pressButton(testObj);
+    await claimer.RButton.pressButton(testObj);
+    await signer.RButton.test();
+    await signer.RButton.test();
+    await signer.RButton.test();
+    const hexToNum = async (signer) => {
+      const chest = await signer.RButton.getVaultEth();
+      return parseInt(chest._hex, 16);
+    };
+    const chestVal = await hexToNum(claimer);
+    console.log("chestVal", chestVal, 200000);
+    expect(chestVal).to.equal(200000);
+    await claimer.RButton.claimTreasure();
+    const empty = await hexToNum(claimer);
+    console.log("empty:", empty, 0);
+    expect(empty).to.equal(0);
+  });
 });
+module.exports = { setup };

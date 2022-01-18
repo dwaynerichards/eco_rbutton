@@ -25,6 +25,7 @@ contract RButton {
 	}
 	IterableMap.Map private depositMap;
 	Chest public chest;
+	uint256 internal tests;
 
 	event Deposit(address depositer, uint256 depositBlock, bool success);
 	event Withdraw(address winner, uint256 claimBlock, uint256 totalEth, bool success);
@@ -51,13 +52,22 @@ contract RButton {
 	function pressButton() public payable minAccess {
 		depositMap.set(msg.sender, block.number);
 		bool success = increaseTreasure(msg.value);
-		emit Deposit(msg.sender, block.number, success);
+		uint256 blockNum = block.number;
+		console.log("%s deposited ether into contract at block %s", msg.sender, blockNum);
+		console.log("the deposit was a success: %s", success);
+		emit Deposit(msg.sender, blockNum, success);
 	}
 
 	function claimTreasure() public payable vaultAccess {
 		bool sent = sendTreasure(msg.sender);
+		console.log("%s attempts to claim treasure", msg.sender, getVaultEth());
 		emit Withdraw(msg.sender, block.number, chest.value, sent);
 		require(sent, "Failed to send Ether");
+	}
+
+	function sendTreasure(address recipient) internal returns (bool sent) {
+		sent = payable(recipient).send(address(this).balance);
+		require(sent);
 	}
 
 	/**
@@ -77,7 +87,7 @@ contract RButton {
     use externally for testing
     @return total returns value in vault */
 	function getVaultEth() public view returns (uint256 total) {
-		total = chest.treasure.balance;
+		total = address(this).balance;
 	}
 
 	function increaseTreasure(uint256 value) internal returns (bool) {
@@ -85,9 +95,9 @@ contract RButton {
 		return true;
 	}
 
-	function sendTreasure(address recipient) internal returns (bool sent) {
-		uint256 fullBalance = getVaultEth();
-		(sent, ) = recipient.call{ value: fullBalance }("");
+	function test() public {
+		console.log("Incrementing Block %s", block.number);
+		tests += 1;
 	}
 
 	receive() external payable {

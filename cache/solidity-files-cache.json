@@ -6,7 +6,7 @@
       "contentHash": "948625a3d1f3e0d5ed4c9ba73af7c72b",
       "sourceName": "contracts/iterableMap.sol",
       "solcConfig": {
-        "version": "0.7.3",
+        "version": "0.7.6",
         "settings": {
           "optimizer": {
             "enabled": false,
@@ -44,11 +44,11 @@
       ]
     },
     "/Users/Darkwing/Desktop/Codesmith/githubclones/eco_rbutton/contracts/RButton.sol": {
-      "lastModificationDate": 1642313011335,
-      "contentHash": "d2a774524d62232629e891c3b1390c50",
+      "lastModificationDate": 1642467592065,
+      "contentHash": "5628ba5c3ff80a9aa07027bc761a6afc",
       "sourceName": "contracts/RButton.sol",
       "solcConfig": {
-        "version": "0.7.3",
+        "version": "0.7.6",
         "settings": {
           "optimizer": {
             "enabled": false,
@@ -93,7 +93,7 @@
       "contentHash": "cc4777addd464ea56fa35b1c45df0591",
       "sourceName": "hardhat/console.sol",
       "solcConfig": {
-        "version": "0.7.3",
+        "version": "0.7.6",
         "settings": {
           "optimizer": {
             "enabled": false,
@@ -135,7 +135,7 @@
       "contentHash": "63beaafb4f2e87c93db7a65892b63baa",
       "sourceName": "contracts/Migrations.sol",
       "solcConfig": {
-        "version": "0.7.3",
+        "version": "0.7.6",
         "settings": {
           "optimizer": {
             "enabled": false,
