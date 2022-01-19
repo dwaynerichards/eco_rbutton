@@ -50,8 +50,6 @@ task("checkChest", "Checks chest", async () => {
   await signers[0].RButton.pressButton(testObj);
   await signers[0].RButton.pressButton(testObj);
   await signers[0].RButton.pressButton(testObj);
-  const chestAfter = await signers[0].RButton.chest();
-  const chest = parseInt(chestAfter.value._hex, 16);
   signers[0].RButton.test();
   signers[0].RButton.test();
   signers[0].RButton.test();

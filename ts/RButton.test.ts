@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-const { expect } = require("./chai-setup");
-const { utils } = require("ethers");
-const { setup } = require("./utils");
+import { expect } from ("./chai_setup");
+import { utils } from ("ethers");
+import { setup } from ("./utils");
 
 /** @dev eslint-disable-next-line no-undef
 setup function that will be called by every test and
