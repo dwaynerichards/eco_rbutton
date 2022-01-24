@@ -24,7 +24,7 @@ export async function setupUser<T extends { [contractName: string]: Contract }>(
   return user as { address: string } & T;
 }
 
-export async function setup() {
+export default async function setup() {
   await deployments.fixture(["RButton"]); //deployment executed and reset (use of evm_snapshot for faster tests)
   const contract = {
     RButton: await ethers.getContract("RButton") //instantiated ethers contract instance

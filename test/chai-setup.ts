@@ -1,9 +1,9 @@
-import chaiModule from "chai";
+import chai from "chai";
 //import { use, expect } from "chai";
 import { chaiEthers } from "chai-ethers"; //fork of waffle chai matchers
 import { solidity } from "ethereum-waffle";
-chaiModule.use(chaiEthers);
-chaiModule.use(solidity);
+chai.use(chaiEthers);
+chai.use(solidity);
 
-const { expect } = chaiModule;
+const { expect } = chai;
 export { expect };

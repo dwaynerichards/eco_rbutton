@@ -1,31 +1,34 @@
 /* eslint-disable no-undef */
 //HRE will be imported via hhconfig
+import { utils } from "ethers";
 
-const setupUsers = async (addresses, contracts) => {
+export async function setupUsers(addresses, contracts) {
   const users = [];
   for (const address of addresses) {
     users.push(await setupUser(address, contracts));
   }
   return users;
-};
+}
 
-const setupUser = async (address, contracts) => {
+export async function setupUser(address, contracts) {
   const user = { address }; //{address: etherAddres, rButton:contracts.connected()}
   for (const key of Object.keys(contracts)) {
     user[key] = contracts[key].connect(await ethers.getSigner(address));
   }
   return user;
-};
+}
 
-const setup = async () => {
+export async function setup() {
   await deployments.fixture(["RButton"]); //deployment executed and reset (use of evm_snapshot for faster tests)
-  const contract = { RButton: await ethers.getContract("RButton") }; //instantiated ethers contract instance
-  //const { deployer } = await getNamedAccounts();
+  const contract = {
+    RButton: await ethers.getContract("RButton") //instantiated ethers contract instance
+  };
+  // These objects allow you to write more readable functions: `wallet.Contract.method(....)`
   const signers = await setupUsers(await getUnnamedAccounts(), contract);
   return { ...contract, signers };
-};
+}
 
-const testObj = { value: 100000 };
+const testObj = { value: utils.parseEther("1") };
 task("gettx", "Prints TX receipt", async () => {
   const { signers } = await setup();
   const signer = signers[0];
@@ -42,6 +45,12 @@ task("upBlock", "Increase Block by 3", async () => {
   await signer.RButton.test().then((tx) => console.log(tx.blockNumber));
   await signer.RButton.test().then((tx) => console.log(tx.blockNumber));
   await signer.RButton.test().then((tx) => console.log(tx.blockNumber));
+});
+
+task("TestBlock", "Increase Block by 3", async () => {
+  const { signers } = await setup();
+  const signer = signers[0];
+  await signer.RButton.pressButton(testObj).then((tx) => console.log(tx.blockNumber));
 });
 
 task("checkChest", "Checks chest", async () => {

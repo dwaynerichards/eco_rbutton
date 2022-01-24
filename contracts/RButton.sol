@@ -4,12 +4,10 @@ import "./iterableMap.sol";
 import "hardhat/console.sol";
 
 /**
-Implemation of iterable map lib,  contract saves gas not iterate
-though array of addresses to access most resent address 
+Implemation of iterable map lib, 
 O(1) vs O(N)
 less of an issue for small contract. 
-@dev array would of sufficed, assuming you wanted to keep a tally of all addresses who have 
-paid ether to contract as that information would be saved onchain either way 
+@dev array would of sufficed 
 */
 contract RButton {
 	using IterableMap for IterableMap.Map;
@@ -60,14 +58,15 @@ contract RButton {
 	}
 
 	function claimTreasure() external payable vaultAccess {
-		bool sent = sendTreasure(msg.sender);
-		console.log("%s attempts to claim treasure", msg.sender, this.checkVault());
-		emit Withdraw(msg.sender, block.number, this.checkVault(), sent);
+		(bool sent, uint256 totalTreasure) = sendTreasure(msg.sender);
+		console.log("%s attempts to claim treasure", msg.sender, totalTreasure);
+		emit Withdraw(msg.sender, block.number, totalTreasure, sent);
+		require(sent, "Treasure not claimed");
 	}
 
-	function sendTreasure(address recipient) internal returns (bool sent) {
+	function sendTreasure(address recipient) internal returns (bool sent, uint256 totalTreasure) {
+		totalTreasure = this.checkVault();
 		(sent, ) = payable(recipient).call{ value: this.checkVault() }("");
-		require(sent, "Failed to send Ether");
 	}
 
 	/**
@@ -106,7 +105,5 @@ contract RButton {
 		emit Refund(msg.sender, success);
 	}
 
-	fallback() external {
-		emit Refund(msg.sender, false);
-	}
+	fallback() external {}
 }

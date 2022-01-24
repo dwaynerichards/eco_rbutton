@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { expect } from "./chai-setup";
 import { utils } from "ethers";
-import { setup, signer } from "./utils";
+import setup, { signer } from "./utils";
 
 /** @dev eslint-disable-next-line no-undef
 setup function that will be called by every test and
@@ -13,7 +13,6 @@ describe("RButton contract", () => {
     let chest = await signer.RButton.checkVault();
     return utils.formatEther(chest);
   };
-  // eslint-disable-next-line no-unused-vars
 
   it("Should deposit ether into treasure chest", async () => {
     //if you write many tests, and they all refer to that fixture, the deployment will not be reexecuted.
@@ -24,6 +23,14 @@ describe("RButton contract", () => {
     const vaultTotal = await vaultToStr(signer);
     const oneEther = utils.formatEther(testObj.value);
     expect(vaultTotal).to.equal(oneEther);
+  });
+
+  it("Should emit Deposit Event with arguments", async () => {
+    const { signers } = await setup();
+    const signer = signers[0];
+    const { RButton, address } = signer;
+
+    await expect(signer.RButton.pressButton(testObj)).to.emit(RButton, "Deposit").withArgs(address, 4, true);
   });
 
   it("Should log true to the blockChain after successful deposit ", async () => {
@@ -66,7 +73,7 @@ describe("RButton contract", () => {
     const signer = signers[0];
     await signer.RButton.pressButton(testObj);
     await signer.RButton.test();
-    expect(signer.RButton.claimTreasure()).to.be.revertedWith("Insufficient time has passed");
+    await expect(signer.RButton.claimTreasure()).to.be.revertedWith("Insufficient time has passed");
   });
 
   it("Vault should be emptied", async () => {
@@ -87,5 +94,20 @@ describe("RButton contract", () => {
     console.log("empty:", emptyVault, "0");
     expect(emptyVault).to.equal("0.0");
   });
+
+  it("Should emit Withdraw Event with arguments", async () => {
+    const { signers } = await setup();
+    const signer = signers[0];
+    const claimer = signers[1];
+    const { RButton, address } = claimer;
+    await signer.RButton.pressButton(testObj);
+    await claimer.RButton.pressButton(testObj);
+    await signer.RButton.test();
+    await signer.RButton.test();
+    await signer.RButton.test();
+
+    await expect(claimer.RButton.claimTreasure())
+      .to.emit(RButton, "Withdraw")
+      .withArgs(address, 9, utils.parseEther("2.0"), true);
+  });
 });
-module.exports = { setup };
