@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity >=0.5.22 <0.9.0;
 import "./iterableMap.sol";
 import "hardhat/console.sol";
 
@@ -23,6 +23,7 @@ contract RButton {
 	IterableMap.Map private depositMap;
 	Chest public chest;
 	uint256 internal tests;
+	mapping(address => bool) players;
 
 	event Deposit(address depositer, uint256 depositBlock, bool success);
 	event Withdraw(address winner, uint256 claimBlock, uint256 totalEth, bool success);
@@ -30,10 +31,11 @@ contract RButton {
 
 	constructor() payable {
 		address treasure = payable(address(this));
-		chest = Chest(treasure, Access.Open, 0);
+		chest = Chest(treasure, Access.Closed, 0);
 	}
 
 	modifier minAccess() {
+		require(players[msg.sender], "no access allowed");
 		require(msg.value == 1 ether, "More Ether is require");
 		require(chest.access == Access.Open, "Vault closed");
 		_;
@@ -41,10 +43,27 @@ contract RButton {
 	modifier vaultAccess() {
 		(address lastAddress, uint256 callerBlock) = getOwner();
 		uint256 minBlock = callerBlock + 2;
-		require(msg.sender == lastAddress, "Claiming treasure not available to this address");
+		require(players[msg.sender] == true, "Only Gamers allowed");
+		require(msg.sender == lastAddress, "Claiming not available to this address");
 		require(block.number > minBlock, "Insufficient time has passed");
 		require(this.checkVault() > 0, "No treasure in this chest");
 		_;
+	}
+
+	//create function to open chest
+	function openChest() external returns (bool success) {
+		chest.access = Access.Open;
+		success = true;
+	}
+
+	function getAccess() external view returns (bool open) {
+		if (chest.access == Access.Open) {
+			open = true;
+		}
+	}
+
+	function loadPlayers(address player) external {
+		players[player] = true;
 	}
 
 	function pressButton() external payable minAccess {

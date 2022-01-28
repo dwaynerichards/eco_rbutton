@@ -65,7 +65,7 @@ describe("RButton contract", () => {
     await goodSign.RButton.pressButton(testObj);
     await goodSign.RButton.test();
     await goodSign.RButton.test();
-    await expect(badSign.RButton.claimTreasure()).to.be.revertedWith("Claiming treasure not available to this address");
+    await expect(badSign.RButton.claimTreasure()).to.be.revertedWith("Claiming Not available to this address");
   });
 
   it("Should revert if claim is made before block allowance", async () => {
