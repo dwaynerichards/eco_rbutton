@@ -35,7 +35,7 @@ contract RButton {
 	}
 
 	modifier minAccess() {
-		require(players[msg.sender], "no access allowed");
+		require(players[msg.sender], "No access allowed");
 		require(msg.value == 1 ether, "More Ether is require");
 		require(chest.access == Access.Open, "Vault closed");
 		_;

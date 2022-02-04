@@ -25,9 +25,10 @@ export async function setupUser<T extends { [contractName: string]: Contract }>(
 }
 
 export default async function setup() {
-  await deployments.fixture(["RButton"]); //deployment executed and reset (use of evm_snapshot for faster tests)
+  await deployments.fixture(["RButton", "Lobby"]); //deployment executed and reset (use of evm_snapshot for faster tests)
   const contract = {
-    RButton: await ethers.getContract("RButton") //instantiated ethers contract instance
+    RButton: await ethers.getContract("RButton"), //instantiated ethers contract instance
+    Lobby: await ethers.getContract("Lobby")
   };
   // These objects allow you to write more readable functions: `wallet.Contract.method(....)`
   const signers = await setupUsers(await getUnnamedAccounts(), contract);
@@ -37,4 +38,5 @@ export default async function setup() {
 export interface signer {
   address: string;
   RButton: Contract;
+  Lobby: Contract;
 }

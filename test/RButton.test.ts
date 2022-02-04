@@ -13,11 +13,21 @@ describe("RButton contract", () => {
     let chest = await signer.RButton.checkVault();
     return utils.formatEther(chest);
   };
+  const setupGame = async (signers: signer[]) => {
+    let totalPlayers = 9;
+    while (totalPlayers >= 0) {
+      let player = signers[totalPlayers];
+      await player.Lobby.joinGame();
+      totalPlayers--;
+    }
+  };
 
   it("Should deposit ether into treasure chest", async () => {
     //if you write many tests, and they all refer to that fixture, the deployment will not be reexecuted.
     const { signers } = await setup();
     const signer = signers[0];
+    await setupGame(signers);
+    await signer.Lobby.beginGame();
     const tx = await signer.RButton.pressButton(testObj);
     await tx.wait();
     const vaultTotal = await vaultToStr(signer);
@@ -29,13 +39,16 @@ describe("RButton contract", () => {
     const { signers } = await setup();
     const signer = signers[0];
     const { RButton, address } = signer;
-
-    await expect(signer.RButton.pressButton(testObj)).to.emit(RButton, "Deposit").withArgs(address, 4, true);
+    await setupGame(signers);
+    await signer.Lobby.beginGame();
+    await expect(signer.RButton.pressButton(testObj)).to.emit(RButton, "Deposit").withArgs(address, 17, true);
   });
 
   it("Should log true to the blockChain after successful deposit ", async () => {
     const { signers } = await setup();
     const signer = signers[0];
+    await setupGame(signers);
+    await signer.Lobby.beginGame();
     let tx = await signer.RButton.pressButton(testObj);
     tx = await tx.wait();
     const isDeposited = tx.events[0].args.success;
@@ -46,6 +59,8 @@ describe("RButton contract", () => {
   it("Should log block in which coins were deposited", async () => {
     const { signers } = await setup();
     const signer = signers[0];
+    await setupGame(signers);
+    await signer.Lobby.beginGame();
     let tx = await signer.RButton.pressButton(testObj);
     tx = await tx.wait();
     const bnHex = tx.events[0].args.depositBlock._hex;
@@ -55,6 +70,8 @@ describe("RButton contract", () => {
   it("should revert after unsuccessful deposit ", async () => {
     const { signers } = await setup();
     const signer = signers[0];
+    await setupGame(signers);
+    await signer.Lobby.beginGame();
     const small = { value: 100 };
     await expect(signer.RButton.pressButton(small)).to.be.revertedWith("More Ether is require");
   });
@@ -62,15 +79,19 @@ describe("RButton contract", () => {
     const { signers } = await setup();
     const goodSign = signers[0];
     const badSign = signers[1];
+    await setupGame(signers);
+    await goodSign.Lobby.beginGame();
     await goodSign.RButton.pressButton(testObj);
     await goodSign.RButton.test();
     await goodSign.RButton.test();
-    await expect(badSign.RButton.claimTreasure()).to.be.revertedWith("Claiming Not available to this address");
+    await expect(badSign.RButton.claimTreasure()).to.be.revertedWith("Claiming not available to this address");
   });
 
   it("Should revert if claim is made before block allowance", async () => {
     const { signers } = await setup();
     const signer = signers[0];
+    await setupGame(signers);
+    await signer.Lobby.beginGame();
     await signer.RButton.pressButton(testObj);
     await signer.RButton.test();
     await expect(signer.RButton.claimTreasure()).to.be.revertedWith("Insufficient time has passed");
@@ -79,6 +100,8 @@ describe("RButton contract", () => {
   it("Vault should be emptied", async () => {
     const { signers } = await setup();
     const signer = signers[0];
+    await setupGame(signers);
+    await signer.Lobby.beginGame();
     const claimer = signers[1];
     await signer.RButton.pressButton(testObj);
     await claimer.RButton.pressButton(testObj);
@@ -100,6 +123,8 @@ describe("RButton contract", () => {
     const signer = signers[0];
     const claimer = signers[1];
     const { RButton, address } = claimer;
+    await setupGame(signers);
+    await signer.Lobby.beginGame();
     await signer.RButton.pressButton(testObj);
     await claimer.RButton.pressButton(testObj);
     await signer.RButton.test();
@@ -108,6 +133,6 @@ describe("RButton contract", () => {
 
     await expect(claimer.RButton.claimTreasure())
       .to.emit(RButton, "Withdraw")
-      .withArgs(address, 9, utils.parseEther("2.0"), true);
+      .withArgs(address, 22, utils.parseEther("2.0"), true);
   });
 });
